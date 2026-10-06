@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FBD Entra External ID Demo</title>
+  <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+</head>
+<body>
+  <h2>FBD Entra External ID Demo</h2>
+
+  <button onclick="signIn()">Sign In</button>
+  <button onclick="signOut()">Sign Out</button>
+
+  <pre id="output"></pre>
+
+  <script>
+    const msalConfig = {
+      auth: {
+        clientId: "8d08810f-4f08-45ba-b376-b471801b0c83",
+        authority: "https://extidtest1.ciamlogin.com/0cc4e50b-cb60-4d44-8ab4-c124e5d976c4",
+        redirectUri: window.location.href
+      }
+    };
+
+    const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+    function signIn() {
+      msalInstance.loginPopup({
+        scopes: ["openid", "profile"]
+      }).then(response => {
+        document.getElementById("output").textContent =
+          JSON.stringify(response.account, null, 2);
+      }).catch(error => console.log(error));
+    }
+
+    function signOut() {
+      msalInstance.logoutPopup();
+      document.getElementById("output").textContent = "";
+    }
+  </script>
+</body>
+</html>
